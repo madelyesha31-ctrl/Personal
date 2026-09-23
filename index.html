@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Madel Yesha Ago — Developer Portfolio</title>
   <meta name="description" content="Portfolio of Madel Yesha Ago, a Junior Developer and BSIT student at Sultan Kudarat State University." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -105,6 +105,7 @@
       letter-spacing: 1.5px;
       color: var(--text);
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .nav-links {
@@ -136,8 +137,6 @@
     .nav-links a:hover { color: var(--text); }
     .nav-links a:hover::after { width: 100%; }
 
-    .nav-links-mobile-cta { display: none; }
-
     .nav-actions {
       display: flex;
       align-items: center;
@@ -156,6 +155,7 @@
       justify-content: center;
       transition: all 0.3s ease;
       font-size: 16px;
+      flex-shrink: 0;
     }
 
     .theme-toggle:hover {
@@ -181,6 +181,33 @@
       border-color: var(--text);
       transform: translateY(-1px);
     }
+
+    /* Mobile hamburger toggle */
+    .nav-toggle {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid var(--line);
+      background: transparent;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 16px;
+      height: 1.5px;
+      background: var(--text);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-toggle.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
     /* Hero */
     :root {
@@ -278,10 +305,10 @@
       margin: 0 auto;
       width: 100%;
       display: grid;
-      grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.1fr) auto;
-      align-items: stretch;
-      gap: 40px;
-      padding: 100px 48px 60px;
+      grid-template-columns: minmax(280px, 480px) 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 90px 48px 60px;
     }
 
     .hero-text {
@@ -397,18 +424,12 @@
       background: var(--gold);
     }
 
-    .hero-photo-block {
+    .hero-photo-wrap {
       position: relative;
       z-index: 2;
-      justify-self: end;
       align-self: stretch;
       height: 100%;
       min-height: 640px;
-    }
-
-    .hero-photo-wrap {
-      position: relative;
-      height: 100%;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -429,13 +450,14 @@
     }
 
     .hero-social {
+      position: absolute;
+      top: 42%;
+      right: 40px;
+      z-index: 4;
       display: flex;
       flex-direction: column;
       gap: 16px;
       align-items: flex-end;
-      justify-self: end;
-      align-self: center;
-      z-index: 4;
     }
 
     .social-pill {
@@ -844,215 +866,144 @@
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
 
-    /* Mobile navigation */
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      padding: 8px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+    /* Responsive hardening */
+    img, video, svg { max-width: 100%; }
+    .hero-inner, section { width: 100%; max-width: 100%; }
+    .hero-inner, .hero-text, .hero-photo-wrap, .hero-social,
+    .projects-grid, .skills-bento, .about-grid, .contact-grid { min-width: 0; }
 
-    .nav-toggle span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--text);
-      transition: all 0.3s ease;
-    }
-
-    .nav-toggle.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .nav-toggle.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .nav-toggle.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    /* Tablet */
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
       .hero-inner {
-        grid-template-columns: minmax(240px, 1fr) minmax(280px, 1fr) auto;
-        gap: 24px;
-        padding: 90px 36px 60px;
-      }
-
-      .hero-photo-block {
-        min-height: 480px;
-      }
-
-      .hero-photo {
-        max-width: 420px;
-      }
-
-      .hero-social {
-        justify-self: end;
-        align-self: center;
-      }
-
-      .social-pill {
-        min-width: 150px;
-        font-size: 13px;
-        padding: 10px 16px;
-      }
-    }
-
-    /* Mobile */
-    @media (max-width: 767px) {
-      .nav-toggle {
-        display: flex;
-      }
-
-      .nav-links {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background: var(--bg);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 32px;
-        z-index: 40;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-      }
-
-      .nav-links.active {
-        opacity: 1;
-        pointer-events: all;
-      }
-
-      .nav-links a {
-        font-size: 18px;
-        font-weight: 600;
-      }
-
-      .nav-links-mobile-cta {
-        margin-top: 8px;
-      }
-
-      .nav-actions {
-        display: none;
-      }
-
-      .hero-inner {
-        grid-template-columns: auto 1fr;
-        gap: 24px;
-        padding: 100px 24px 48px;
-      }
-
-      .hero-photo-block {
-        grid-column: 1 / -1;
-        justify-self: center;
-        height: auto;
-        min-height: auto;
-        margin: 0 auto;
-        width: 100%;
-        max-width: 340px;
-        position: relative;
+        grid-template-columns: 1fr;
+        gap: clamp(28px, 4vw, 40px);
       }
 
       .hero-photo-wrap {
-        height: auto;
-        display: block;
-        opacity: 1;
-        animation: none;
+        min-height: clamp(500px, 62vw, 640px);
+        order: -1;
+        align-items: center;
       }
 
       .hero-photo {
-        height: auto;
-        aspect-ratio: 3 / 4;
-        border-radius: 8px;
-        max-width: 100%;
+        width: 100%;
+        max-width: min(100%, 520px);
+      }
+    }
+
+    @media (max-width: 860px) {
+      nav { width: calc(100% - 24px); max-width: none; padding: 0 16px; }
+      .hero-inner { padding-left: 20px; padding-right: 20px; }
+      .hero-photo {
+        width: 100%;
+        max-width: min(100%, 520px);
+      }
+      .hero-social { width: calc(100% - 40px); }
+    }
+
+    @media (max-width: 560px) {
+      nav { top: 10px; height: 58px; }
+      .nav-brand { font-size: 12px; letter-spacing: 1px; }
+      .hero-inner { padding: 110px 16px 32px; }
+      .hero-name { font-size: clamp(38px, 13vw, 58px); }
+      .hero-statement { font-size: 0.92rem; }
+      .hero-social { width: calc(100% - 32px); margin-left: 16px; margin-right: 16px; grid-template-columns: 1fr; }
+      .social-pill { min-width: 0; }
+      .project-card, .about-card { padding: 24px 20px; }
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 150px 24px 40px;
       }
 
+      /* Center the whole hero text block on mobile, matching the target layout */
       .hero-text {
-        grid-column: 1 / -1;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-eyebrow { justify-content: center; }
+      .hero-name { align-items: center; text-align: center; }
+      .hero-statement { margin-left: auto; margin-right: auto; }
+
+      .hero-name { font-size: clamp(44px, 14vw, 72px); }
+
+      /* Photo: centered, arched top to match the mockup silhouette */
+      .hero-photo-wrap {
+        min-height: clamp(500px, 70vw, 640px);
+        order: -1;
+        align-items: center;
+      }
+      .hero-photo {
+        max-width: min(100%, 520px);
+        height: 88%;
+        border-radius: 220px 220px 6px 6px;
       }
 
-      .hero-name {
-        font-size: clamp(40px, 12vw, 64px);
-      }
-
+      /* Social pills: 2-column grid under the photo, like the mockup */
       .hero-social {
-        position: absolute;
-        top: 50%;
-        left: 14px;
-        right: auto;
-        transform: translateY(-50%);
-        gap: 10px;
+        position: static;
+        margin: 8px 24px 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-items: stretch;
       }
-
       .social-pill {
         min-width: 0;
-        font-size: 12px;
-        padding: 9px 14px;
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
       }
-
-      .hero-statement {
-        font-size: 0.95rem;
-      }
+      .social-pill::after { margin-left: 6px; }
 
       .hero-shape-circle,
-      .hero-shape-ring {
-        right: -10%;
-        opacity: 0.4;
-      }
-
+      .hero-shape-ring { right: -6%; }
       .projects-grid { grid-template-columns: 1fr; }
       .skills-bento { grid-template-columns: repeat(2, 1fr); }
       .about-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
+
+      /* Mobile nav: swap link row + "Get in touch" pill for a hamburger */
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-toggle { display: flex; }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: rgba(var(--surface-rgb), 0.98);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 10px;
+        box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.18);
+      }
+      .nav-links.open a {
+        padding: 13px 16px;
+        border-radius: 10px;
+        color: var(--text);
+      }
+      .nav-links.open a::after { display: none; }
+      .nav-links.open a:hover { background: var(--surface-2); }
     }
 
-    /* Small mobile */
-    @media (max-width: 480px) {
-      .nav-brand {
-        font-size: 12px;
-        letter-spacing: 1px;
-      }
-
-      .hero-inner {
-        padding: 80px 20px 40px;
-        gap: 28px;
-      }
-
-      .hero-name {
-        font-size: clamp(36px, 11vw, 52px);
-      }
-
-      .hero-photo-block {
-        max-width: 300px;
-      }
-
-      .hero-statement {
-        font-size: 0.9rem;
-        margin-bottom: 24px;
-      }
-
-      .hero-social {
-        right: 10px;
-        gap: 8px;
-      }
-
-      .social-pill {
-        font-size: 11px;
-        padding: 8px 14px;
-      }
-
+    @media (max-width: 560px) {
       section { padding: 72px 20px; }
       .skills-bento { grid-template-columns: 1fr; }
       .hero-shape-tri-navy,
-      .hero-shape-tri-light { height: 14vh; }
+      .hero-shape-tri-light { height: 16vh; }
+      .hero-photo { max-width: 280px; }
     }
   </style>
 </head>
@@ -1060,23 +1011,20 @@
 
   <nav id="navbar">
     <div class="nav-brand">Madel Yesha Ago</div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="#work">Work</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li class="nav-links-mobile-cta"><a href="#contact" class="nav-cta">Get in touch</a></li>
     </ul>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <span id="themeIcon">☀️</span>
       </button>
       <a href="#contact" class="nav-cta">Get in touch</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
@@ -1108,29 +1056,8 @@
           </a>
         </div>
 
-        <div class="hero-photo-block">
-          <div class="hero-photo-wrap">
-            <img src="image.png" alt="Madel Yesha Ago" class="hero-photo">
-          </div>
-        </div>
-
-        <div class="hero-social">
-            <a href="https://www.facebook.com/madel.paladin" class="social-pill">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-              Facebook
-            </a>
-          <a href="https://www.instagram.com/ofgicuql/" class="social-pill">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="5"></circle><circle cx="17.5" cy="6.5" r="1.5"></circle></svg>
-            Instagram
-          </a>
-          <a href="https://www.linkedin.com/in/madel-yesha-ago-5a0631435/" class="social-pill">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-            LinkedIn
-          </a>
-            <a href="https://web.telegram.org/k/" class="social-pill">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-              Telegram
-            </a>
+        <div class="hero-photo-wrap">
+          <img src="image.png" alt="Madel Yesha Ago" class="hero-photo">
         </div>
       </div>
     </section>
@@ -1405,23 +1332,32 @@
       }
     });
 
-    // Mobile menu toggle
+    // Mobile hamburger menu
     const navToggle = document.getElementById('navToggle');
-    const navLinks = document.querySelector('.nav-links');
+    const navLinks = document.getElementById('navLinks');
 
-    if (navToggle && navLinks) {
-      navToggle.addEventListener('click', () => {
-        navToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
-      });
+    navToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
 
-      navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          navToggle.classList.remove('active');
-          navLinks.classList.remove('active');
-        });
+    navLinks.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
       });
-    }
+    });
+
+    // Close the mobile menu if the viewport is resized back to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860) {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
   </script>
 </body>
 </html>
