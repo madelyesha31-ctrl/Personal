@@ -1003,7 +1003,13 @@
       .skills-bento { grid-template-columns: 1fr; }
       .hero-shape-tri-navy,
       .hero-shape-tri-light { height: 16vh; }
-      .hero-photo { max-width: 280px; }
+      .hero-photo {
+        width: 100%;
+        max-width: 440px;
+        height: auto;
+        object-fit: contain;
+        object-position: center;
+      }
     }
   </style>
 </head>
