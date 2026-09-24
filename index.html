@@ -690,51 +690,95 @@
     }
 
     /* Skills */
-    .skills-bento {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .skill-card {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 24px 20px;
-      text-align: center;
-      transition: all 0.3s ease;
+    #skills {
+      --fan-bg: var(--surface, #f3f8ff);
+      --fan-card: var(--card, #ffffff);
+      --fan-border: var(--border, #cfe0f7);
+      --fan-accent: var(--primary, #4f86d6);
+      --fan-text: var(--text, #1f2f46);
+      --fan-muted: var(--text-muted, #5f7592);
       position: relative;
+      z-index: 1;
     }
 
-    .skill-card:hover {
-      border-color: var(--text);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08);
+    .fan {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
     }
 
-    .skill-icon {
-      width: 40px;
-      height: 40px;
-      margin: 0 auto 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      color: var(--accent);
-    }
+  .fan-stage {
+    position: relative;
+    height: 420px;
+    outline-offset: 4px;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .fan-stage:active { cursor: grabbing; }
+  .fan-stage:focus-visible { outline: 2px solid var(--fan-accent); border-radius: 16px; }
 
-    .skill-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
+  .fan-card {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 260px;
+    height: 320px;
+    margin-left: -130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--fan-card), var(--fan-bg));
+    border: 2px solid var(--fan-border);
+    border-radius: 24px;
+    box-shadow: 0 14px 30px rgba(45, 90, 160, 0.16);
+    user-select: none;
+    will-change: transform;
+    transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 0.3s ease,
+                border-color 0.3s ease;
+  }
+  .fan-card.is-active { border-color: var(--fan-accent); }
 
-    .skill-level {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
+  .fan-icon { font-size: 58px; line-height: 1; }
+  .fan-name { font-size: 1.25rem; font-weight: 700; color: var(--fan-text); }
+  .fan-level {
+    font-size: 0.9rem;
+    color: var(--fan-accent);
+    background: rgba(79, 134, 214, 0.12);
+    padding: 4px 14px;
+    border-radius: 999px;
+  }
+
+  .fan-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .fan-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--fan-border);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .fan-dot:hover { background: var(--fan-muted); }
+  .fan-dot[aria-current="true"] { background: var(--fan-accent); transform: scale(1.25); }
+
+  @media (max-width: 640px) {
+    .fan-stage { height: 400px; }
+    .fan-card { width: 230px; height: 290px; margin-left: -115px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fan-card { transition: none; }
+  }
 
     /* About / Status */
     .about-grid {
@@ -856,6 +900,16 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes skillCardIn {
+      from { opacity: 0; transform: translateY(24px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes skillIconFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(2deg); }
+    }
+
     .animate-in {
       opacity: 0;
       animation: fadeInUp 0.7s ease forwards;
@@ -866,11 +920,20 @@
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
 
+    @media (prefers-reduced-motion: reduce) {
+      .animate-in,
+      .fan-stage {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+    }
+
     /* Responsive hardening */
     img, video, svg { max-width: 100%; }
     .hero-inner, section { width: 100%; max-width: 100%; }
     .hero-inner, .hero-text, .hero-photo-wrap, .hero-social,
-    .projects-grid, .skills-bento, .about-grid, .contact-grid { min-width: 0; }
+    .projects-grid, .fan, .about-grid, .contact-grid { min-width: 0; }
 
     @media (max-width: 1100px) {
       .hero-inner {
@@ -964,7 +1027,6 @@
       .hero-shape-circle,
       .hero-shape-ring { right: -6%; }
       .projects-grid { grid-template-columns: 1fr; }
-      .skills-bento { grid-template-columns: repeat(2, 1fr); }
       .about-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
 
@@ -1000,7 +1062,6 @@
 
     @media (max-width: 560px) {
       section { padding: 72px 20px; }
-      .skills-bento { grid-template-columns: 1fr; }
       .hero-shape-tri-navy,
       .hero-shape-tri-light { height: 16vh; }
       .hero-photo {
@@ -1157,47 +1218,19 @@
         <h2 class="section-title">Skills</h2>
         <p class="section-desc">Technologies and tools I work with regularly as a developer and IT student.</p>
       </div>
-      <div class="skills-bento">
-        <div class="skill-card">
-          <div class="skill-icon">🌐</div>
-          <div class="skill-name">HTML5</div>
-          <div class="skill-level">Advanced</div>
+
+      <div class="fan" aria-roledescription="carousel" aria-label="Skills">
+        <div class="fan-stage" tabindex="0">
+          <div class="fan-card"><div class="fan-icon">🌐</div><div class="fan-name">HTML5</div><div class="fan-level">Advanced</div></div>
+          <div class="fan-card"><div class="fan-icon">🎨</div><div class="fan-name">CSS3</div><div class="fan-level">Advanced</div></div>
+          <div class="fan-card"><div class="fan-icon">⚡</div><div class="fan-name">JavaScript</div><div class="fan-level">Intermediate</div></div>
+          <div class="fan-card"><div class="fan-icon">📦</div><div class="fan-name">Git</div><div class="fan-level">Intermediate</div></div>
+          <div class="fan-card"><div class="fan-icon">🗄️</div><div class="fan-name">SQL</div><div class="fan-level">Intermediate</div></div>
+          <div class="fan-card"><div class="fan-icon">🖥️</div><div class="fan-name">Responsive Design</div><div class="fan-level">Advanced</div></div>
+          <div class="fan-card"><div class="fan-icon">🔧</div><div class="fan-name">VS Code</div><div class="fan-level">Advanced</div></div>
+          <div class="fan-card"><div class="fan-icon">📊</div><div class="fan-name">Figma</div><div class="fan-level">Basic</div></div>
         </div>
-        <div class="skill-card">
-          <div class="skill-icon">🎨</div>
-          <div class="skill-name">CSS3</div>
-          <div class="skill-level">Advanced</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-icon">⚡</div>
-          <div class="skill-name">JavaScript</div>
-          <div class="skill-level">Intermediate</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-icon">📦</div>
-          <div class="skill-name">Git</div>
-          <div class="skill-level">Intermediate</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-icon">🗄️</div>
-          <div class="skill-name">SQL</div>
-          <div class="skill-level">Intermediate</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-icon">🖥️</div>
-          <div class="skill-name">Responsive Design</div>
-          <div class="skill-level">Advanced</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-icon">🔧</div>
-          <div class="skill-name">VS Code</div>
-          <div class="skill-level">Advanced</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-icon">📊</div>
-          <div class="skill-name">Figma</div>
-          <div class="skill-level">Basic</div>
-        </div>
+        <div class="fan-dots" role="group" aria-label="Choose a skill"></div>
       </div>
     </section>
 
@@ -1298,6 +1331,19 @@
           <div class="contact-label">Facebook</div>
           <div class="contact-value">Madel Yesha Ago</div>        
         </a>
+         <a href="https://www.linkedin.com/in/madel-yesha-ago-5a0631435/" class="contact-card">
+          <div class="contact-label">Linkedin</div>
+          <div class="contact-value">Madel Yesha Ago</div>       
+        </a>
+         </a>
+         <a href="https://www.instagram.com/ofgicuql/" class="contact-card">
+          <div class="contact-label">Instagram</div>
+          <div class="contact-value">Madel Yesha Ago</div>       
+        </a>
+         <a href="https://www.facebook.com/profile.php?id=61590648817134" class="contact-card">
+          <div class="contact-label">Facebook Page</div>
+          <div class="contact-value">Madel Yesha Ago</div>       
+        </a>
       </div>
     </section>
   </main>
@@ -1364,6 +1410,135 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    // Reveal the skills grid when it enters the viewport.
+    const skillsGrid = document.querySelector('.fan');
+    if (skillsGrid) {
+      skillsGrid.classList.add('reveal-ready');
+
+      if ('IntersectionObserver' in window) {
+        const skillsObserver = new IntersectionObserver((entries, observer) => {
+          if (entries[0].isIntersecting) {
+            skillsGrid.classList.add('is-visible');
+            observer.disconnect();
+          }
+        }, { threshold: 0.2 });
+
+        skillsObserver.observe(skillsGrid);
+      } else {
+        skillsGrid.classList.add('is-visible');
+      }
+    }
+
+    // Skills fan carousel
+    (() => {
+      const root = document.querySelector("#skills .fan");
+      if (!root) return;
+
+      const stage = root.querySelector(".fan-stage");
+      const cards = [...root.querySelectorAll(".fan-card")];
+      const dotsWrap = root.querySelector(".fan-dots");
+      const len = cards.length;
+      let active = 0;
+
+      const cfg = {
+        overlap: 0.55,
+        spreadDeg: 35,
+        liftPx: 12,
+        activeScale: 1.04,
+        inactiveScale: 0.96,
+      };
+
+      const wrap = (n) => ((n % len) + len) % len;
+
+      const offsetOf = (i) => {
+        const raw = i - active;
+        const alt = raw > 0 ? raw - len : raw + len;
+        return Math.abs(alt) < Math.abs(raw) ? alt : raw;
+      };
+
+      const dots = cards.map((card, i) => {
+        const b = document.createElement("button");
+        b.className = "fan-dot";
+        b.type = "button";
+        b.setAttribute("aria-label", "Go to " + card.querySelector(".fan-name").textContent);
+        b.addEventListener("click", () => go(i));
+        dotsWrap.appendChild(b);
+        return b;
+      });
+
+      function render() {
+        const narrow = window.innerWidth < 640;
+        const maxOffset = narrow ? 1 : 3;
+        const cardW = cards[0].offsetWidth || 200;
+        const spacing = Math.max(10, Math.round(cardW * (1 - cfg.overlap)));
+
+        cards.forEach((card, i) => {
+          const off = offsetOf(i);
+          const abs = Math.abs(off);
+          const visible = abs <= maxOffset;
+          const isActive = off === 0;
+
+          card.style.transform =
+            `translateX(${off * spacing}px) ` +
+            `translateY(${abs * 10 - (isActive ? cfg.liftPx : 0)}px) ` +
+            `scale(${isActive ? cfg.activeScale : cfg.inactiveScale})`;
+          card.style.opacity = visible ? 1 : 0;
+          card.style.pointerEvents = visible ? "auto" : "none";
+          card.style.zIndex = 100 - abs;
+          card.classList.toggle("is-active", isActive);
+          card.setAttribute("aria-hidden", String(!visible));
+        });
+
+        dots.forEach((d, i) => d.setAttribute("aria-current", String(i === active)));
+      }
+
+      function go(i) { active = wrap(i); render(); }
+
+      cards.forEach((card, i) => card.addEventListener("click", () => {
+        if (!dragged) go(i);
+      }));
+
+      stage.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") go(active - 1);
+        if (e.key === "ArrowRight") go(active + 1);
+      });
+
+      let startX = null;
+      let dragged = false;
+      stage.addEventListener("pointerdown", (e) => { startX = e.clientX; dragged = false; });
+      stage.addEventListener("pointermove", (e) => {
+        if (startX !== null && Math.abs(e.clientX - startX) > 8) dragged = true;
+      });
+      window.addEventListener("pointerup", (e) => {
+        if (startX === null) return;
+        const travel = e.clientX - startX;
+        startX = null;
+        if (travel > 50) go(active - 1);
+        else if (travel < -50) go(active + 1);
+        setTimeout(() => { dragged = false; }, 0);
+      });
+
+      window.addEventListener("resize", render);
+      render();
+
+      let autoSlide = null;
+      const startAutoSlide = () => {
+        stopAutoSlide();
+        autoSlide = setInterval(() => go(active + 1), 3200);
+      };
+      const stopAutoSlide = () => {
+        clearInterval(autoSlide);
+        autoSlide = null;
+      };
+
+      stage.addEventListener("pointerenter", stopAutoSlide);
+      stage.addEventListener("pointerleave", startAutoSlide);
+      stage.addEventListener("focus", stopAutoSlide);
+      stage.addEventListener("blur", startAutoSlide);
+
+      startAutoSlide();
+    })();
   </script>
 </body>
 </html>
