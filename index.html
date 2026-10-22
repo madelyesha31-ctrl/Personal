@@ -1081,9 +1081,59 @@
         mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
       }
     }
+
+    /* Preloader */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: var(--bg);
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .preloader-logo {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      animation: pulse 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 24px var(--accent-glow)) drop-shadow(0 0 48px var(--accent-glow));
+    }
+    .preloader-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .preloader-logo { animation: none; }
+      .preloader-spinner { animation: none; }
+    }
   </style>
 </head>
 <body>
+  <!-- Preloader -->
+  <div class="preloader" id="preloader" aria-hidden="true" role="status">
+    <img src="preloader.png" alt="" class="preloader-logo" aria-hidden="true">
+    <div class="preloader-spinner" aria-hidden="true"></div>
+  </div>
 
   <nav id="navbar">
     <div class="nav-brand">Madel Yesha Ago</div>
@@ -1216,6 +1266,24 @@
             <span class="project-tag">JavaScript</span>
           </div>
           <a href="https://food-lake-three.vercel.app/" target="_blank" rel="noopener" class="project-link">View project →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-card-header">
+            <div class="project-icon">💼</div>
+            <span class="project-status">Portfolio</span>
+          </div>
+          <h3 class="project-title">Victorious Studio Portfolio</h3>
+          <p class="project-desc">
+            A personal developer portfolio site for Victorious Studio. 
+            Built to present work, skills, and contact info in a clean, responsive layout.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">HTML</span>
+            <span class="project-tag">CSS</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+          <a href="https://portfolio-two-chi-lphurd3k35.vercel.app/" target="_blank" rel="noopener" class="project-link">View project →</a>
         </article>
       </div>
     </section>
@@ -1362,15 +1430,26 @@
   </footer>
 
   <script>
-    // Scroll to top on page load/refresh
-    window.addEventListener('beforeunload', () => {
-      window.scrollTo(0, 0);
-    });
-    
-    // Also scroll to top on page load for browsers that don't fire beforeunload
-    window.addEventListener('load', () => {
-      window.scrollTo(0, 0);
-    });
+    // Preloader
+    (function() {
+      const preloader = document.getElementById('preloader');
+      if (!preloader) return;
+
+      const hide = () => {
+        preloader.classList.add('hidden');
+        // Clean up after transition
+        setTimeout(() => preloader.remove(), 500);
+      };
+
+      // Hide when everything is loaded
+      if (document.readyState === 'complete') {
+        hide();
+      } else {
+        window.addEventListener('load', hide);
+        // Safety fallback: never let it block navigation > 4s
+        setTimeout(hide, 4000);
+      }
+    })();
 
     // Theme toggle
     const themeToggle = document.getElementById('themeToggle');
